@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace Alfattack.Routing
+namespace Blazor.SubRouter
 {
-    public class TenantRoutingStateProvider : IRoutingStateProvider
+    public class SubRouterStateProvider : IRoutingStateProvider
     {
         public RouteData? RouteData { get; set; }
     }

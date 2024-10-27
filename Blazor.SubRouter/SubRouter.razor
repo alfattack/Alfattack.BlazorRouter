@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @using System.Reflection
+@implements IDisposable
 
 <Router @ref=router AppAssembly="AppAssembly" AdditionalAssemblies="AdditionalAssemblies" NotFound="NotFound!" Found="Found!" Navigating="Navigating!" OnNavigateAsync="OnNavigate" />
 
@@ -43,9 +44,19 @@
     /// </summary>
     [Parameter] public RenderFragment? Navigating { get; set; }
 
+    protected override void OnInitialized()
+    {
+        NavigationManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs locationChangedEventArgs)
+    {
+
+    }
+
     private Task OnNavigate(NavigationContext context)
     {
-        if (!(RoutingStateProvider is TenantRoutingStateProvider tenantRoutingStateProvider))
+        if (!(RoutingStateProvider is SubRouterStateProvider tenantRoutingStateProvider))
             return Task.CompletedTask;
 
         tenantRoutingStateProvider.RouteData = null;
@@ -76,5 +87,10 @@
         routeTableRouteMethod!.Invoke(routeTable, new[] { routeContext });
 
         return (routeContextType.GetProperty("Handler")!.GetValue(routeContext) as Type, routeContextType.GetProperty("Parameters")!.GetValue(routeContext) as IReadOnlyDictionary<string, object?>);
+    }
+
+    public void Dipose()
+    {
+        NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 }
