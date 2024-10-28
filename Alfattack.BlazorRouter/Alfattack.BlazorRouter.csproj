@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageId>Blazor.SubRouter</PackageId>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/alfattack/Blazor.SubRouter</RepositoryUrl>
+    <RepositoryUrl>https://github.com/alfattack/Alfattack.BlazorRouter</RepositoryUrl>
   </PropertyGroup>
 
     <PropertyGroup>
