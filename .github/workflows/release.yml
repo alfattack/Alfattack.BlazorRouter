@@ -9,7 +9,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v3
         - name: Verify commit exists in origin/main
-          run: git fetch --no-tags --prune --depth=1 origin +refs/heads/
+          run: git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
         - name: Version
           run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
         - name: Build
