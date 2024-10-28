@@ -5,7 +5,7 @@ namespace Alfattack.BlazorRouter
 {
     public static class ServiceRegistryExtensions
     {
-        public static void AddPrefixedRouting(this IServiceCollection services)
+        public static void AddAlfattackBlazorRouter(this IServiceCollection services)
         {
             services.AddSingleton<IRoutingStateProvider, SubRouterStateProvider>();
             services.AddScoped<SubRouterPageService>();
