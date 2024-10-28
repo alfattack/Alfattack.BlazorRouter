@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @using System.Reflection
-@implements IDisposable
 
 <Router @ref=router AppAssembly="AppAssembly" AdditionalAssemblies="AdditionalAssemblies" NotFound="NotFound!" Found="Found!" Navigating="Navigating!" OnNavigateAsync="OnNavigate" />
 
@@ -10,6 +9,8 @@
     [Inject] public NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject] public IRoutingStateProvider RoutingStateProvider { get; set; } = default!;
+
+    [Inject] public SubRouterPageService SubRouterPageService { get; set; } = default!;
 
     /// <summary>
     /// Gets or sets the assembly that should be searched for components matching the URI.
@@ -37,42 +38,38 @@
     [EditorRequired]
     public RenderFragment<RouteData>? Found { get; set; }
 
-    [Parameter] public Type EveryPage { get; set; } = default!;
-
     /// <summary>
     /// Get or sets the content to display when asynchronous navigation is in progress.
     /// </summary>
     [Parameter] public RenderFragment? Navigating { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        NavigationManager.LocationChanged += HandleLocationChanged;
-    }
-
-    private void HandleLocationChanged(object? sender, LocationChangedEventArgs locationChangedEventArgs)
-    {
-
-    }
-
-    private Task OnNavigate(NavigationContext context)
-    {
-        if (!(RoutingStateProvider is SubRouterStateProvider tenantRoutingStateProvider))
-            return Task.CompletedTask;
-
-        tenantRoutingStateProvider.RouteData = null;
-
-        if (context.Path.StartsWith("prefix"))
+        if (firstRender)
         {
-            // This will be the route of the component without the supplied prefix.
-            var pathWithoutPrefix = context.Path.Replace("prefix", "");
-            var (pageType, parameters) = FindComponent(pathWithoutPrefix);
+            var currentPath = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+            await CheckAndUpdateRouteState(currentPath);
+        }
+    }
+
+    private Task OnNavigate(NavigationContext context) => CheckAndUpdateRouteState(context.Path);
+
+    private async Task CheckAndUpdateRouteState(string navigationPathAndQuery)
+    {
+        if (!(RoutingStateProvider is SubRouterStateProvider subRouterStateProvider))
+            return;
+
+        subRouterStateProvider.RouteData = null;
+        var subPageData = await SubRouterPageService.GetPageData(navigationPathAndQuery);
+
+        if (subPageData.IsSubRoute)
+        {
+            var (pageType, parameters) = FindComponent(subPageData.SubRoute!); 
             if (pageType != null)
             {
-                tenantRoutingStateProvider.RouteData = new RouteData(pageType, parameters ?? new Dictionary<string, object?>());
+                subRouterStateProvider.RouteData = new RouteData(pageType, parameters ?? new Dictionary<string, object?>());
             }
         }
-
-        return Task.CompletedTask;
     }
 
     private (Type?, IReadOnlyDictionary<string, object?>?) FindComponent(string path)
@@ -87,10 +84,5 @@
         routeTableRouteMethod!.Invoke(routeTable, new[] { routeContext });
 
         return (routeContextType.GetProperty("Handler")!.GetValue(routeContext) as Type, routeContextType.GetProperty("Parameters")!.GetValue(routeContext) as IReadOnlyDictionary<string, object?>);
-    }
-
-    public void Dipose()
-    {
-        NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 }

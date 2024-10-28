@@ -8,6 +8,7 @@ namespace Blazor.SubRouter
         public static void AddPrefixedRouting(this IServiceCollection services)
         {
             services.AddSingleton<IRoutingStateProvider, SubRouterStateProvider>();
+            services.AddScoped<SubRouterPageService>();
         }
     }
 }
