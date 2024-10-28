@@ -1,3 +1,4 @@
+# Build on every commit to master.
 name: Build
 
 on:
