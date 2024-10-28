@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Routing
 @using System.Reflection
+@implements IDisposable
 
 <Router @ref=router AppAssembly="AppAssembly" AdditionalAssemblies="AdditionalAssemblies" NotFound="NotFound!" Found="Found!" Navigating="Navigating!" OnNavigateAsync="OnNavigate" />
 
@@ -43,6 +44,11 @@
     /// </summary>
     [Parameter] public RenderFragment? Navigating { get; set; }
 
+    protected override void OnInitialized()
+    {
+        NavigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -52,10 +58,18 @@
         }
     }
 
+    private async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        
+    }
+
     private Task OnNavigate(NavigationContext context) => CheckAndUpdateRouteState(context.Path);
 
     private async Task CheckAndUpdateRouteState(string navigationPathAndQuery)
     {
+        if (router == null)
+            return;
+
         if (!(RoutingStateProvider is SubRouterStateProvider subRouterStateProvider))
             return;
 
@@ -79,10 +93,15 @@
         var routesProperty = routerType.GetProperty("Routes", BindingFlags.NonPublic | BindingFlags.Instance);
         var routeTable = routesProperty?.GetValue(router);
         var routeContextType = routerAssembly.GetTypes().FirstOrDefault(t => t.Name == "RouteContext")!;
-        var routeContext = Activator.CreateInstance(routeContextType, new[] { path });
+        var routeContext = Activator.CreateInstance(routeContextType, new[] { path?.Split("?")?.ElementAtOrDefault(0) });
         var routeTableRouteMethod = routeTable!.GetType().GetMethod("Route");
         routeTableRouteMethod!.Invoke(routeTable, new[] { routeContext });
 
         return (routeContextType.GetProperty("Handler")!.GetValue(routeContext) as Type, routeContextType.GetProperty("Parameters")!.GetValue(routeContext) as IReadOnlyDictionary<string, object?>);
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.RemoveLocationChangingHandler(OnLocationChanging);
     }
 }
