@@ -1,4 +1,4 @@
-using Blazor.SubRouter;
+using Alfattack.BlazorRouter;
 using CustomRouting;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
