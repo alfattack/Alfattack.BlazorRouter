@@ -10,12 +10,12 @@ namespace Alfattack.BlazorRouter
     {
         public bool IsSubRoute { get; set; }
         public string? SubRoutePrefix { get; set; }
-        public string? SubRoute { get; set; }
-        public string? FullRoute { get; set; }
+        public string? PageRouteWithoutSubRoutePrefix { get; set; }
+        public string? PageRouteWithSubRoutePrefix { get; set; }
     }
 
     public class SubRouterPageService
     {
-        public virtual Task<SubRouterPageData> GetPageData(string route) => Task.FromResult(new SubRouterPageData { IsSubRoute = false, SubRoutePrefix = "", FullRoute = route });
+        public virtual Task<SubRouterPageData> GetPageData(string route) => Task.FromResult(new SubRouterPageData { IsSubRoute = false, SubRoutePrefix = "", PageRouteWithSubRoutePrefix = route });
     }
 }

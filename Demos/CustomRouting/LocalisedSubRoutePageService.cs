@@ -14,8 +14,8 @@ namespace CustomRouting
                 return Task.FromResult(new SubRouterPageData
                 {
                     IsSubRoute = true,
-                    FullRoute = route,
-                    SubRoute = route.Substring(localisationPrefix.Length, route.Length - localisationPrefix.Length),
+                    PageRouteWithSubRoutePrefix = route,
+                    PageRouteWithoutSubRoutePrefix = route.Substring(localisationPrefix.Length, route.Length - localisationPrefix.Length),
                     SubRoutePrefix = localisationPrefix
                 });
             }
@@ -24,8 +24,8 @@ namespace CustomRouting
                 return Task.FromResult(new SubRouterPageData
                 {
                     IsSubRoute = true,
-                    FullRoute = localisationPrefix + "/" + route,
-                    SubRoute = route,
+                    PageRouteWithSubRoutePrefix = localisationPrefix + "/" + route,
+                    PageRouteWithoutSubRoutePrefix = route,
                     SubRoutePrefix = localisationPrefix
                 });
             }
