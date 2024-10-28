@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blazor.SubRouter
+namespace Alfattack.BlazorRouter
 {
     public static class ServiceRegistryExtensions
     {

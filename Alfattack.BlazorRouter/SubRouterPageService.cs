@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blazor.SubRouter
+namespace Alfattack.BlazorRouter
 {
     public class SubRouterPageData
     {

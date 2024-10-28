@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace Blazor.SubRouter
+namespace Alfattack.BlazorRouter
 {
     public class SubRouterStateProvider : IRoutingStateProvider
     {

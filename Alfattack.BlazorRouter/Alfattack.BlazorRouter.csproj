@@ -4,6 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>Blazor.SubRouter</PackageId>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/alfattack/Blazor.SubRouter</RepositoryUrl>
+  </PropertyGroup>
+
+    <PropertyGroup>
+    
   </PropertyGroup>
 
 
