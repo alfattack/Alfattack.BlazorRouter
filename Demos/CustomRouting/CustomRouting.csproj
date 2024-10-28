@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Blazor.SubRouter\Blazor.SubRouter.csproj" />
+    <ProjectReference Include="..\..\Alfattack.BlazorRouter\Alfattack.BlazorRouter.csproj" />
   </ItemGroup>
 
 </Project>

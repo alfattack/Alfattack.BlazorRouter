@@ -1,7 +1,8 @@
-﻿@using CustomRouting.Pages
+﻿@using Alfattack.BlazorRouter
+@using CustomRouting.Pages
 @inject IRoutingStateProvider _routingStateProvider;
 
-<Blazor.SubRouter.SubRouter AppAssembly="@typeof(App).Assembly">
+<SubRouter AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -12,4 +13,4 @@
             <p role="alert">Sorry, there's nothing at this address.</p>
         </LayoutView>
     </NotFound>
-</Blazor.SubRouter.SubRouter>
+</SubRouter>
